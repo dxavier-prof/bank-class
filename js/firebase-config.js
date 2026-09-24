@@ -9,7 +9,7 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.13.0/firebas
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyBDxtvRUhXrXsKASwBC8MPZzvgfXeME2CE",
   authDomain: "bank-class-eaaca.firebaseapp.com",
   projectId: "bank-class-eaaca",
