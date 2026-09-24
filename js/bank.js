@@ -56,37 +56,59 @@ export async function deleteItem(itemId) {
 export async function giveMoney(studentId, bills) {
   const total = bills.reduce((a, b) => a + b, 0);
   const studentRef = doc(db, "students", studentId);
+  const movimientoRef = doc(collection(db, "students", studentId, "movimientos"));
+
   await runTransaction(db, async (tx) => {
     const snap = await tx.get(studentRef);
+    if (!snap.exists()) throw new Error("El estudiante no existe");
+
     const current = snap.data()?.balance || 0;
+    
+    // Actualizar saldo y crear historial dentro de la transacción
     tx.update(studentRef, { balance: current + total });
-  });
-  await addDoc(collection(db, "students", studentId, "movimientos"), {
-    tipo: "entrega",
-    monto: total,
-    detalle: `Billetes: ${bills.map(b => "$" + b).join(", ")}`,
-    fecha: serverTimestamp()
+    tx.set(movimientoRef, {
+      tipo: "entrega",
+      monto: total,
+      detalle: `Billetes: ${bills.map(b => "$" + b).join(", ")}`,
+      fecha: serverTimestamp()
+    });
   });
 }
 
 // Venta de un artículo de la tienda a un estudiante (descuenta saldo)
 export async function sellItem(studentId, item) {
   const studentRef = doc(db, "students", studentId);
-  let ok = true;
-  await runTransaction(db, async (tx) => {
-    const snap = await tx.get(studentRef);
-    const current = snap.data()?.balance || 0;
-    if (current < item.price) { ok = false; return; }
-    tx.update(studentRef, { balance: current - item.price });
-  });
-  if (!ok) return false;
-  await addDoc(collection(db, "students", studentId, "movimientos"), {
-    tipo: "compra",
-    monto: item.price,
-    detalle: `${item.emoji || "🛍️"} ${item.name}`,
-    fecha: serverTimestamp()
-  });
-  return true;
+  const movimientoRef = doc(collection(db, "students", studentId, "movimientos"));
+
+  try {
+    await runTransaction(db, async (tx) => {
+      const snap = await tx.get(studentRef);
+      if (!snap.exists()) throw new Error("El estudiante no existe");
+
+      const current = snap.data()?.balance || 0;
+
+      // Lanzamos un error si no tiene suficiente saldo para cancelar la transacción
+      if (current < item.price) {
+        throw new Error("Saldo insuficiente");
+      }
+
+      // Actualizar el saldo del estudiante
+      tx.update(studentRef, { balance: current - item.price });
+
+      // Registrar el movimiento de la compra
+      tx.set(movimientoRef, {
+        tipo: "compra",
+        monto: item.price,
+        detalle: `${item.emoji || "🛍️"} ${item.name}`,
+        fecha: serverTimestamp()
+      });
+    });
+
+    return true;
+  } catch (error) {
+    console.error("Error en sellItem:", error.message);
+    return false;
+  }
 }
 
 export async function getStudent(studentId) {
