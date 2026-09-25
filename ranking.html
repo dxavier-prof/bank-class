@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Banco Escolar · Ranking de ahorro</title>
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  body{background:linear-gradient(160deg,#12242f,#1F3B4D);}
+  .rk-wrap{max-width:900px;margin:0 auto;padding:40px 24px 60px;color:#fff;}
+  .rk-title{text-align:center;margin-bottom:36px;}
+  .rk-title h1{color:#fff;font-size:2.4rem;}
+  .rk-title p{color:#B9C8D0;}
+  .rk-row{
+    display:flex;align-items:center;gap:18px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:16px;padding:18px 24px;margin-bottom:12px;
+  }
+  .rk-row.top1{background:linear-gradient(135deg,#E8A33D,#C9821E);border:none;}
+  .rk-row.top2{background:linear-gradient(135deg,#8FA6B2,#5D7A88);border:none;}
+  .rk-row.top3{background:linear-gradient(135deg,#B5732E,#8C5622);border:none;}
+  .rk-medal{font-size:2rem;width:52px;text-align:center;}
+  .rk-name{font-family:'Fredoka';font-size:1.3rem;flex:1;}
+  .rk-amount{font-family:'Fredoka';font-size:1.5rem;font-variant-numeric:tabular-nums;}
+  .rk-back{display:block;text-align:center;margin-top:30px;color:#B9C8D0;font-size:.85rem;text-decoration:none;}
+</style>
+</head>
+<body>
+  <div class="rk-wrap">
+    <div class="rk-title">
+      <h1>🏆 Ranking de ahorro</h1>
+      <p>Actualizado en tiempo real</p>
+    </div>
+    <div id="rankList"></div>
+    <a class="rk-back" href="index.html">← Volver</a>
+  </div>
+  <script type="module" src="js/ranking.js"></script>
+</body>
+</html>

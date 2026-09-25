@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Banco Escolar · Banquero</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div id="pinGate" class="pin-gate">
+    <div class="coin">🏦</div>
+    <h2>Acceso del banquero</h2>
+    <p>Ingresa el PIN para abrir el panel.</p>
+    <div class="field"><input type="password" id="pinInput" placeholder="PIN" inputmode="numeric"></div>
+    <button class="btn btn-money" id="pinBtn" style="width:100%">Entrar</button>
+    <p id="pinError" class="hidden" style="color:var(--danger)">PIN incorrecto.</p>
+  </div>
+
+  <div id="app" class="wrap hidden">
+    <div class="topbar">
+      <div class="brand"><span class="dot"></span> Panel del banquero</div>
+      <div style="display:flex;gap:10px;">
+        <a class="exit" href="ranking.html" target="_blank">📽️ Abrir ranking</a>
+        <a class="exit" href="index.html">Salir</a>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="operar">Operar</button>
+      <button class="tab-btn" data-tab="tienda">Tienda</button>
+    </div>
+
+    <div id="tab-operar" class="tab-panel active">
+      <div class="grid-2">
+        <div class="panel">
+          <h2>Estudiantes</h2>
+          <div class="student-list" id="studentList"></div>
+          <div class="new-student">
+            <input type="text" id="newStudentName" placeholder="Nombre del nuevo estudiante">
+            <input type="text" id="newStudentNie" placeholder="NIE (8 dígitos)" inputmode="numeric" maxlength="8" style="max-width:150px;">
+            <button class="btn btn-outline" id="addStudentBtn">Agregar</button>
+          </div>
+          <p id="nieError" class="hidden" style="color:var(--danger);font-size:.8rem;margin-top:6px;">El NIE debe tener exactamente 8 dígitos.</p>
+        </div>
+
+        <div class="panel">
+          <h2 id="selectedName">Selecciona un estudiante</h2>
+
+          <div id="operarBox" class="hidden">
+            <label>Entregar dinero (toca los billetes)</label>
+            <div class="bills" id="billRow">
+              <button class="bill" data-v="5"><span class="num">$5</span><span class="sub">BANCO</span></button>
+              <button class="bill" data-v="10"><span class="num">$10</span><span class="sub">BANCO</span></button>
+              <button class="bill" data-v="20"><span class="num">$20</span><span class="sub">BANCO</span></button>
+              <button class="bill" data-v="50"><span class="num">$50</span><span class="sub">BANCO</span></button>
+              <button class="bill" data-v="100"><span class="num">$100</span><span class="sub">BANCO</span></button>
+            </div>
+            <div class="total-preview">
+              <span>Total a entregar</span>
+              <span class="amount" id="giveTotal">$0</span>
+            </div>
+            <div style="display:flex;gap:10px;margin-bottom:22px;">
+              <button class="btn btn-money" id="confirmGive" disabled>Entregar dinero</button>
+              <button class="btn btn-outline" id="clearGive">Limpiar</button>
+            </div>
+
+            <label>Vender artículo de la tienda</label>
+            <div class="item-grid" id="sellItemGrid" style="margin-bottom:12px;"></div>
+            <button class="btn btn-store" id="confirmSell" disabled>Vender al estudiante seleccionado</button>
+
+            <h3 style="margin-top:26px;font-size:1rem;">Historial</h3>
+            <div class="history" id="historyBox"><p class="empty">Selecciona un estudiante para ver su historial.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-tienda" class="tab-panel">
+      <div class="panel">
+        <h2>Artículos de la tienda</h2>
+        <div class="item-grid" id="itemGrid"></div>
+        <h3 style="margin-top:22px;font-size:.95rem;">Agregar artículo</h3>
+        <div class="grid-2">
+          <div class="field"><label>Emoji</label><input type="text" id="itemEmoji" placeholder="🍪" maxlength="4"></div>
+          <div class="field"><label>Nombre</label><input type="text" id="itemName" placeholder="Ej. Galleta"></div>
+        </div>
+        <div class="field"><label>Precio</label><input type="number" id="itemPrice" min="1" placeholder="10"></div>
+        <button class="btn btn-store" id="addItemBtn">Agregar a la tienda</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="js/teacher.js"></script>
+</body>
+</html>
